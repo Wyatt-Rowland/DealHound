@@ -40,7 +40,7 @@ const BestBuyProducts = ({ searchTerm }) => {
           <Text fontWeight="bold" fontSize={{ base: 'xs', sm: 'sm', md: 'md' }} as="h4" mt="1" noOfLines={2} isTruncated>{product.name}</Text>
           <Text mt="1">${product.salePrice}<Text as="s" ml="2" color="gray.500">${product.regularPrice}</Text></Text>
           {(isExpanded || showLongDescription) && hasLongDescription && (
-            <Text maxW={{ base: '80%', md: '100%' }} fontSize="sm" mt="3" noOfLines={[4, null, null, null]}>{product.longDescription}</Text>
+            <Text maxW={{ base: '75%', md: '100%' }} fontSize="sm" mt="3" noOfLines={[4, null, null, null]}>{product.longDescription}</Text>
           )}
           <Box>
             <Flex direction={flexDirection} alignItems="center">
