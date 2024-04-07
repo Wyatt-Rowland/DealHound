@@ -5,7 +5,7 @@ import { Box, Text, Image, Link, Flex, Badge, SimpleGrid, useBreakpointValue } f
 
 const SmallFeaturedBestBuy = () => {
   const featuredProduct = useFeaturedBestBuyProducts();
-  const columns = useBreakpointValue({ base: 2, md: 3, lg: 4 });
+  const columns = useBreakpointValue({ base: 1, md: 3, lg: 4 });
   
   if (!featuredProduct) {
     return <Box>Loading...</Box>; // Or any other loading indicator you prefer
@@ -15,7 +15,7 @@ const SmallFeaturedBestBuy = () => {
     <Box px={{ base: '1rem', lg: '4rem' }} pb='1rem'>
         {/* <Text zIndex='10000' textColor='red'>whwa</Text> */}
       <Link href={featuredProduct.url} isExternal _hover={{ textDecoration: 'none' }} key={featuredProduct.sku || featuredProduct.name}>
-      <Box maxW={{ base: 'xs', sm: 'xs', md: 'sm', lg: 'md' }} borderWidth="1px" borderRadius="lg" overflow="hidden" height='lg' bg="gray.100" _hover={{ shadow: 'lg' }}>
+      <Box maxW={{ base: 'xs', sm: 'xs', md: 'sm', lg: 'sm' }} borderWidth="1px" borderRadius="lg" overflow="hidden" height='lg' bg="gray.100" _hover={{ shadow: 'lg' }}>
               <Flex justifyContent="center" alignItems="center" height="40%" bg="gray.300">
                 <Image zIndex='0' src={featuredProduct.image} alt={featuredProduct.name} maxH="80%" maxW={{ base: '90%' }} objectFit="contain" />
               </Flex>

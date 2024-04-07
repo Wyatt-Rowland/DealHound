@@ -6,8 +6,8 @@ import Sidebar from './Sidebar';
 import BestBuyProducts from './GetProducts/BestBuyProducts';
 import ContactUs from './ContactUs';
 import Faq from './FAQ'
-import FeaturedBestBuy from './GetProducts/FeaturedBestBuy';
-import SmallFeaturedBestBuy from './GetProducts/SmallFeaturedBestBuy';
+// import FeaturedBestBuy from './GetProducts/FeaturedBestBuy';
+// import SmallFeaturedBestBuy from './GetProducts/SmallFeaturedBestBuy';
 // import EbayCatalogSearch from './GetProducts/useEbayProducts';
 // import productsData from './data/products'; // Your products data
 
@@ -31,24 +31,7 @@ const MainLayout = ({ searchTerm }) => {
         <ContactUs />
       )}
       <Box flex="1" overflow="auto">
-      {currentPage === 'home' && !searchTerm && (
-          <>
-            <FeaturedBestBuy />
-            <Flex flex='1' overflow='auto'
-                pt={{ base: '1rem', md: '1rem' }}
-                px={{ base: '1rem', md: '3rem' }}
-                pb='1rem'
-                flexWrap='wrap' 
-                direction={{ base: "column", sm:'column', md: "column", lg:'row' }} 
-                alignItems='center'
-                justifyContent='center'
-            >
-              <SmallFeaturedBestBuy />
-              <SmallFeaturedBestBuy />
-              <SmallFeaturedBestBuy />
-            </Flex>
-          </>
-        )}
+      
           
         {/* Show BestBuyProducts if there is a searchTerm */}
         {searchTerm && <BestBuyProducts searchTerm={searchTerm} />}
@@ -59,3 +42,18 @@ const MainLayout = ({ searchTerm }) => {
 };
 
 export default MainLayout;
+// {currentPage === 'home' && !searchTerm && (
+//           <>
+//             <FeaturedBestBuy />
+//             <Flex flex='1' overflow='auto'
+//                 pt={{ base: '1rem', md: '1rem' }}
+//                 px={{ base: '1rem', md: '3rem' }}
+//                 pb='1rem'
+//                 flexWrap='wrap' 
+//                 direction={{ base: "column", sm:'column', md: "column", lg:'row' }} 
+//                 alignItems='center'
+//                 justifyContent='center'
+//             >
+//             </Flex>
+//           </>
+//         )}

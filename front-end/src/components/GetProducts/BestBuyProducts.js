@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import useBestBuyProducts from './useBestBuyProducts'; // Adjust the path as necessary
+import { useAppContext } from '../../context/AppContext'; // adjust the import path as necessary
 import { Box, Text, Image, Link, Flex, Badge, SimpleGrid, Center, Button, useBreakpointValue, Link as ChakraLink } from '@chakra-ui/react';
 
 const BestBuyProducts = ({ searchTerm }) => {
-  const [minSalePercentage, setMinSalePercentage] = useState(20);
-  const products = useBestBuyProducts(searchTerm, minSalePercentage);
+  const { minSalePercentage } = useAppContext(); // consume the context
+  const products = useBestBuyProducts(searchTerm, 60);
   const columns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
 
   const Product = ({ product }) => {
@@ -33,12 +34,18 @@ const BestBuyProducts = ({ searchTerm }) => {
           </Link>
         </Center>  
         <Box p="2" maxW="100%">
-          <Badge borderRadius="full" px="2" colorScheme="teal">Sale</Badge>
+          {product.percentSavings > 0 && (
+            <Badge borderRadius="full" px="2" colorScheme="teal">Sale</Badge>
+          )}
           <Text color="gray.500" fontWeight="semibold" letterSpacing="wide" fontSize="xs" textTransform="uppercase" ml="2" isTruncated>
             Best Buy &bull; {product.percentSavings} OFF
           </Text>
           <Text fontWeight="bold" fontSize={{ base: 'xs', sm: 'sm', md: 'md' }} as="h4" mt="1" noOfLines={2} isTruncated>{product.name}</Text>
-          <Text mt="1">${product.salePrice}<Text as="s" ml="2" color="gray.500">${product.regularPrice}</Text></Text>
+          <Text mt="1">${product.salePrice}
+            {product.percentSavings > 0 && (
+              <Text as="s" ml="2" color="gray.500">${product.regularPrice}</Text>
+            )}
+          </Text>
           {(isExpanded || showLongDescription) && hasLongDescription && (
             <Text maxW={{ base: '75%', md: '100%' }} fontSize="sm" mt="3" noOfLines={[4, null, null, null]}>{product.longDescription}</Text>
           )}

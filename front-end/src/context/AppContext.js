@@ -6,7 +6,9 @@ const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children, clearSearchTerm }) => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(null);
+  const [minSalePercentage, setMinSalePercentage] = useState(20);
+  
 
   const goToHome = () => {
     setCurrentPage('home');
@@ -20,12 +22,16 @@ export const AppProvider = ({ children, clearSearchTerm }) => {
     setCurrentPage('ContactUs');
     clearSearchTerm();
   }
+
+  const updateMinSalePercentage = (percentage) => {
+    setMinSalePercentage(percentage);
+  };
     
 
   const goToSearchResults = (searchTerm) => setCurrentPage('searchResults');
 
   return (
-    <AppContext.Provider value={{ currentPage, goToFaq, goToHome, goToContactUs, goToSearchResults }}>
+    <AppContext.Provider value={{ currentPage, goToFaq, goToHome, goToContactUs, goToSearchResults, updateMinSalePercentage, minSalePercentage }}>
       {children}
     </AppContext.Provider>
   );
