@@ -6,7 +6,7 @@ const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children, clearSearchTerm }) => {
-  const [currentPage, setCurrentPage] = useState(null);
+  const [currentPage, setCurrentPage] = useState('home');
   const [minSalePercentage, setMinSalePercentage] = useState(20);
   
 

@@ -9,22 +9,29 @@ const cache = new NodeCache({ stdTTL: 300 });
 
 router.get('/bestBuy/bestbuy', async (req, res) => {
   const { searchTerm, minSalePercentage, featured, pageSize } = req.query;
-  const key = `products-${searchTerm}-${minSalePercentage}-${featured}`;
-  const cachedData = cache.get(key);
-  if (cachedData) {
-    console.log('Serving from cache');
-    return res.json(cachedData);
+  const key = `products-${searchTerm}-${minSalePercentage}-${featured}-${pageSize}`;
+  if (featured === 'false') {
+    // Try to get data from cache for non-featured requests
+    const cachedData = cache.get(key);
+    if (cachedData) {
+      console.log('Serving from cache');
+      return res.json(cachedData);
+    }
   }
 
   console.log('Fetching new data');
   try {
-    const products = await fetchBestBuyData({ searchTerm, minSalePercentage, featured: featured === 'true', pageSize });
-    cache.set(key, products);
+    const products = await fetchBestBuyData({ searchTerm, minSalePercentage, featured: featured === 'true', pageSize: Number(pageSize) });
+// Cache the result only if it's not a featured request
+  if (featured === 'false') {
+      cache.set(key, products);
+    }
     res.json(products);
   } catch (error) {
+    console.error('Error fetching products', error);
     res.status(500).json({ message: "Failed to fetch products" });
-  }
-});
+    }
+  });
 
 module.exports = router;
 

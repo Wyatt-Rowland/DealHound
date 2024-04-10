@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAppContext } from '../../context/AppContext';
 
-const useBestBuyProducts = (searchTerm, pageSize) => {
+const useBestBuyProducts = (searchTerm, pageSize, featured = false) => {
   const [products, setProducts] = useState([]);
   const { minSalePercentage } = useAppContext(); // Use context
 
@@ -15,7 +15,7 @@ const useBestBuyProducts = (searchTerm, pageSize) => {
       }
       try {
         const response = await axios.get('/api/bestBuy/bestbuy', {
-          params: { searchTerm, minSalePercentage, pageSize }
+          params: { searchTerm, minSalePercentage,featured, pageSize }
         });
         setProducts(response.data);
       } catch (error) {
@@ -23,7 +23,7 @@ const useBestBuyProducts = (searchTerm, pageSize) => {
       }
     };
     fetchProducts();
-  }, [searchTerm, minSalePercentage, pageSize]);
+  }, [searchTerm, minSalePercentage, featured, pageSize]);
 
   return products;
 };

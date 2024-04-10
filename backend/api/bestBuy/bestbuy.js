@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const fetchBestBuyData = async ({ searchTerm = '', minSalePercentage = null, featured = false, pageSize }) => {
   try {
-    let query = searchTerm ? `(search=${encodeURIComponent(searchTerm)})` : '';
+    let query = searchTerm ? `(search=${searchTerm})` : '';
     if (minSalePercentage) {
       query += `&percentSavings>${minSalePercentage}&onSale=true`;
     }

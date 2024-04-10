@@ -6,6 +6,7 @@ import Sidebar from './Sidebar';
 import BestBuyProducts from './GetProducts/BestBuyProducts';
 import ContactUs from './ContactUs';
 import Faq from './FAQ'
+import HomeLayout from './homelayout/HomeLayout';
 // import FeaturedBestBuy from './GetProducts/FeaturedBestBuy';
 // import SmallFeaturedBestBuy from './GetProducts/SmallFeaturedBestBuy';
 // import EbayCatalogSearch from './GetProducts/useEbayProducts';
@@ -24,6 +25,9 @@ const MainLayout = ({ searchTerm }) => {
         <Sidebar isMobile={isMobile} />
       </Box>
       {/* <EbayCatalogSearch searchTerm={searchTerm}/> */}
+      {currentPage === 'home' && !searchTerm && (
+        <HomeLayout/>
+      )}
       {currentPage === 'FAQ' && !searchTerm && (
         <Faq />
       )}
