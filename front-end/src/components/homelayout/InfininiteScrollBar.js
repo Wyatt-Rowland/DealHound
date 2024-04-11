@@ -1,52 +1,76 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Button, HStack, Image, Text } from '@chakra-ui/react';
-import useInfiniteScroll from '../GetProducts/useInfiniteScroll';
-import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Center, Badge, HStack, Image, Text, IconButton,Link as ChakraLink } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
-const InfiniteScrollBar = () => {
-    const products = useInfiniteScroll('monitors', 35, true, 10)
-    const [page, setPage] = useState(1);
-    const loaderRef = useRef(null);
+const InfiniteScrollBar = ({ products }) => {
+  const scrollBoxRef = useRef(null);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const scrollIntervalRef = useRef(null);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const first = entries[0];
-                if (first.isIntersecting) {
-                    setPage((prevPage) => prevPage + 1);
-                }
-            },
-            { threshold: 0.1 }
-        );
+  // Function to scroll right
+  const scrollRight = () => {
+    if(scrollBoxRef.current) {
+      const { current: box } = scrollBoxRef;
+      box.scrollBy({ left: box.offsetWidth, behavior: 'smooth' });
+    }
+  };
 
-        if (loaderRef.current) {
-            observer.observe(loaderRef.current);
-        }
+  // Function to scroll left
+  const scrollLeft = () => {
+    if(scrollBoxRef.current) {
+      const { current: box } = scrollBoxRef;
+      box.scrollBy({ left: -box.offsetWidth, behavior: 'smooth' });
+    }
+  };
 
-        // Cleanup function
-        return () => {
-            if (loaderRef.current) {
-                observer.unobserve(loaderRef.current);
-            }
-        };
-    }, []);
+  // Check if we're at the end of the scroll to loop back to the start
+  useEffect(() => {
+    const handleScroll = () => {
+      const { current: box } = scrollBoxRef;
+      if (box.scrollWidth - box.scrollLeft === box.clientWidth) {
+        // We're at the end, scroll back to start
+        box.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+    };
 
-    return (
-        <Box overflowX="scroll" whiteSpace="nowrap" p="4">
-            <HStack spacing="20px">
-                {products.map((product, index) => (
-                    <Box key={index} w="160px" boxShadow="md" p="5" bg="white" borderRadius="md" textAlign="center">
-                        <Image src={product.image} alt={product.name} mx="auto" />
-                        <Text fontSize="sm" mt="2" isTruncated>{product.name}</Text>
-                        {/* Add more product details here */}
-                    </Box>
-                ))}
-                <div ref={loaderRef}>
-                    <Button isLoading>Loading more...</Button>
-                </div>
-            </HStack>
-        </Box>
-    );
+    const box = scrollBoxRef.current;
+    box.addEventListener('scroll', handleScroll);
+
+    return () => box.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <Center position="relative">
+      <IconButton
+        icon={<ChevronLeftIcon />}
+        position="absolute"
+        left="5%"
+        top="50%"
+        transform="translateY(-50%)"
+        zIndex={2}
+        onClick={scrollLeft}
+      />
+      <Box maxW='60vw' ref={scrollBoxRef} overflowX="scroll" whiteSpace="nowrap" p="4">
+        <HStack spacing="20px">
+          {products.map((product, index) => (
+            <Box w='55vw' maxH='30rem' key={index} boxShadow="md" p="5" bg="white" borderRadius="md" textAlign="center">
+              <Image boxSize='4rem' src={product.image} alt={product.name} objectFit='contain' mx="auto" />
+              <Text fontSize="sm" mt="2" isTruncated>{product.name}</Text>
+              <Text fontSize="sm" mt="2" isTruncated>{product.name}</Text>
+            </Box>
+          ))}
+        </HStack>
+      </Box>
+      <IconButton
+        icon={<ChevronRightIcon />}
+        position="absolute"
+        right="5%"
+        top="50%"
+        transform="translateY(-50%)"
+        zIndex={2}
+        onClick={scrollRight}
+      />
+    </Center>
+  );
 };
-
 export default InfiniteScrollBar;
