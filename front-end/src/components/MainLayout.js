@@ -12,7 +12,7 @@ import HomeLayout from './homelayout/HomeLayout';
 // import EbayCatalogSearch from './GetProducts/useEbayProducts';
 // import productsData from './data/products'; // Your products data
 
-const MainLayout = ({ searchTerm }) => {
+const MainLayout = React.memo(({ searchTerm }) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const { currentPage } = useAppContext();
 
@@ -43,21 +43,9 @@ const MainLayout = ({ searchTerm }) => {
       </Box>
     </Flex>
   );
-};
+});
+
+MainLayout.whyDidYouRender = true;
+
 
 export default MainLayout;
-// {currentPage === 'home' && !searchTerm && (
-//           <>
-//             <FeaturedBestBuy />
-//             <Flex flex='1' overflow='auto'
-//                 pt={{ base: '1rem', md: '1rem' }}
-//                 px={{ base: '1rem', md: '3rem' }}
-//                 pb='1rem'
-//                 flexWrap='wrap' 
-//                 direction={{ base: "column", sm:'column', md: "column", lg:'row' }} 
-//                 alignItems='center'
-//                 justifyContent='center'
-//             >
-//             </Flex>
-//           </>
-//         )}

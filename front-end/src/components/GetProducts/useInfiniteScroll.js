@@ -1,23 +1,39 @@
 // frontend/src/GetProducts/useInfiniteScroll.js
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import { debounce } from 'lodash';
 
-const useInfiniteScroll = (searchTerm, featured = true, pageSize) => {
-    const minSalePercentage = 35;
+const useInfiniteScroll = (searchTerm, pageSize) => {
+    const minSalePercentage = 30;
+    const featured = 'true'
+    console.log(`Fetching products for: ${searchTerm}, ${pageSize}, ${featured}`);
     const [products, setProducts] = useState([]);
+    // const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
-        const fetchProducts = async () => {
+        // setLoading(true)
+        const fetchProducts = debounce(async () => {
+            console.log('Fetching products for:', searchTerm, featured, pageSize);
             try {
                 const { data } = await axios.get('/api/bestBuy/bestbuy', {
-                    params: { searchTerm, minSalePercentage, pageSize, featured },
+                    params: { searchTerm, minSalePercentage, featured, pageSize},
                 });
                 setProducts(prevProducts => [...prevProducts, ...data]);
+                // setProducts(data || []);
             } catch (error) {
                 console.error('Error fetching products:', error);
+                setError(error)
             }
-        };
+            // setLoading(false);
+        }, 500); 
         fetchProducts();
-    }, [searchTerm, minSalePercentage, pageSize, featured]);
+
+        return () => {
+            fetchProducts.cancel();  // This is how you cancel a debounced function
+        };
+    }, [searchTerm, pageSize, featured, minSalePercentage]);
+    // return { products, loading, error };
     return products;
 };
 

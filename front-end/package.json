@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^8.0.1",
     "concurrently": "^8.2.2"
   }
 }

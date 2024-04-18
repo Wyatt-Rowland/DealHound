@@ -1,17 +1,19 @@
 // backend/src/api/bestBuy/bestbuy.js
 const axios = require('axios');
 
-const fetchBestBuyData = async ({ searchTerm = '', minSalePercentage = null, featured = false, pageSize }) => {
+const fetchBestBuyData = async ({ searchTerm = '', minSalePercentage = null, featured = false, pageSize = 10 }) => {
+  
   try {
     let query = searchTerm ? `(search=${searchTerm})` : '';
     if (minSalePercentage) {
       query += `&percentSavings>${minSalePercentage}&onSale=true`;
     }
     if (featured) {
-      // Optionally adjust the query to fetch featured products
+      // Optionally adjust th equery to fetch featured products
       // This is a placeholder for whatever logic you use to determine "featured" products
     }
 
+    console.log(searchTerm, minSalePercentage, featured, pageSize)
     const apiKey = process.env.BEST_BUY_API_KEY;
     const response = await axios.get(`https://api.bestbuy.com/v1/products(${query})`, {
       params: {
@@ -22,7 +24,6 @@ const fetchBestBuyData = async ({ searchTerm = '', minSalePercentage = null, fea
         sort: 'description.asc',
       }
     });
-
     return response.data.products || [];
   } catch (error) {
     console.error('Error fetching data from Best Buy API', error);

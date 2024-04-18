@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Center, Heading, Flex, Text, Link, Stack, Image, useBreakpointValue, IconButton } from '@chakra-ui/react';
 
 const HomeText = () => {
+  console.log("Me TOO!!")
     return (
         <Center width='100vw' p={4}>
         <Flex p={8} borderRadius='lg' border='1px solid gray' bg='blue.400' direction={{ base: 'column' }} alignItems='center' textAlign='center'>
