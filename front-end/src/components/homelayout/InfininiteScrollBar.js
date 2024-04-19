@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { Box, Center, Link, useBreakpointValue, Spinner, Badge, HStack, Image, Text, IconButton, Link as ChakraLink } from '@chakra-ui/react';
+import { Box, Center, Link, useBreakpointValue, Button, Spinner, Badge, HStack, Image, Text, IconButton, Link as ChakraLink } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { debounce } from 'lodash'; // Debounce function to manage scroll events
 import useInfiniteScroll from '../GetProducts/useInfiniteScroll';
@@ -8,44 +8,56 @@ import useInfiniteScroll from '../GetProducts/useInfiniteScroll';
 const InfiniteScrollBar = React.memo(() => {
   const scrollBoxRef = useRef(null);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [pauseAutoScroll, setPauseAutoScroll] = useState(false);
   const scrollIntervalRef = useRef(null);
-  const keywords = ["gaming", "televisions", "monitors", "desktops", "mice", "keyboards"];
+  const keywords = ["gaming", "televisions", "monitors", "desktops", "mice"
+  , "keyboards"];
   const randomKeyword = useMemo(() => {
       return keywords[Math.floor(Math.random() * keywords.length)];
   }, []);
-  const searchTerm = randomKeyword;
   const pageSize = 10;
 
   console.log("I am updating many times")
 
-  const products = useInfiniteScroll(`${searchTerm}`, pageSize);
-
-
+  const products = useInfiniteScroll(`${randomKeyword}`, pageSize);
   
   // Responsiveness: Adjust based on viewport size
   const mediaQueryResults = useBreakpointValue({ base: '60vw', md: '60vw', lg: '60vw' });
   const boxWidth = useMemo(() => mediaQueryResults, [mediaQueryResults]);
   const imageSize = useBreakpointValue({ base: '8rem', md: '10rem', lg: '12rem' });
-  const scrollAmount = boxWidth
+  const scrollAmount = boxWidth;
+  const autoScrollTimeout = 10000; // 10 seconds
+
+  const handleManualScroll = useCallback(() => {
+    if (!pauseAutoScroll) {
+      setPauseAutoScroll(true);
+      setTimeout(() => {
+        setPauseAutoScroll(false);
+      }, autoScrollTimeout);
+    }
+  }, [pauseAutoScroll, autoScrollTimeout]);
 
   const scrollRight = useCallback(() => {
-    scrollBoxRef.current?.scrollBy({ left: scrollBoxRef.current.offsetWidth + 20, behavior: 'smooth' });
-  }, []);
+    handleManualScroll();
+    scrollBoxRef.current?.scrollBy({ left: scrollBoxRef.current.offsetWidth + 21, behavior: 'smooth' });
+  }, [handleManualScroll]);
 
   const scrollLeft = useCallback(() => {
-    scrollBoxRef.current?.scrollBy({ left: -scrollBoxRef.current.offsetWidth, behavior: 'smooth' });
-  }, []);
+    handleManualScroll();
+    scrollBoxRef.current?.scrollBy({ left: -scrollBoxRef.current.offsetWidth -21, behavior: 'smooth' });
+  }, [handleManualScroll]);
 
   const startAutoScroll = useCallback(() => {
     if (!isUserInteracting) {
-      scrollIntervalRef.current = setInterval(scrollRight, 5000);
+      scrollIntervalRef.current = setInterval(scrollRight, 4000);
     }
   }, [isUserInteracting, scrollRight]);
 
   const stopAutoScroll = useCallback(() => {
     clearInterval(scrollIntervalRef.current);
     scrollIntervalRef.current = null;
-  }, []);
+  }, []);  
+
 
   useEffect(() => {
     startAutoScroll();
@@ -58,7 +70,7 @@ const InfiniteScrollBar = React.memo(() => {
 
 
   return (
-    <Center position="relative">
+    <Center position="relative" pt="4rem">
       <IconButton
         icon={<ChevronLeftIcon />}
         position="absolute"
@@ -72,7 +84,7 @@ const InfiniteScrollBar = React.memo(() => {
         <HStack spacing='20px' width='full'>
           {Array.isArray(products) && products.length > 0 ? (
             products.map((product, index) => (
-            <Box minW={boxWidth} maxW={boxWidth} key={index} boxShadow="md" p="5" bg="white" borderRadius="md" textAlign="center">
+            <Box minW={boxWidth} maxW={boxWidth} key={index} boxShadow="md" p="5" bg="white" textAlign="center">
               <Link href={product.url} isExternal _hover={{ textDecoration: 'none' }}>
                 <Image boxSize={imageSize} src={product.image} alt={product.name} objectFit='contain' mx="auto" />
                 <Text fontSize="sm" mt="2" isTruncated>{product.name}</Text>
@@ -89,6 +101,9 @@ const InfiniteScrollBar = React.memo(() => {
                     <Text as="s" ml="2" color="gray.500">${product.regularPrice}</Text>
                     )}
                   </Text>
+                  <Center p={2}>
+                    <Button as={ChakraLink} size="sm" mt='0.5rem' bg='blue.400' href={product.url} isExternal >View Product</Button>
+                   </Center>
                  </Box>
               </Link>
             </Box>

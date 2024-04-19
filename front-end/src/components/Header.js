@@ -128,7 +128,7 @@ const handleSubmit = () => {
             fontSize: '1rem', // Adjust font size as needed
           }}
         />
-        <Button onClick={handleSubmit}>Search</Button>
+        <Button onClick={handleSubmit} mr='1rem'>Search</Button>
         {/* <FaUserCircle size="2em" /> */}
       </Flex>
     </Flex>

@@ -6,12 +6,12 @@ import InfiniteScrollBar from './InfininiteScrollBar';
 const HomeLayout = () => {
 
     return (
-        <Center>
+        <Box>
             <Flex direction='column'>
-                <HomeText/>
+                <HomeText />
                 <InfiniteScrollBar />
             </Flex>
-        </Center>
+        </Box>
     );
 };
 

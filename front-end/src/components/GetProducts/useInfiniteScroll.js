@@ -16,7 +16,7 @@ const useInfiniteScroll = (searchTerm, pageSize) => {
         const fetchProducts = debounce(async () => {
             console.log('Fetching products for:', searchTerm, featured, pageSize);
             try {
-                const { data } = await axios.get('/api/bestBuy/bestbuy', {
+                const { data } = await axios.get('http://localhost:3001/api/bestBuy/bestbuy', {
                     params: { searchTerm, minSalePercentage, featured, pageSize},
                 });
                 setProducts(prevProducts => [...prevProducts, ...data]);
@@ -32,7 +32,7 @@ const useInfiniteScroll = (searchTerm, pageSize) => {
         return () => {
             fetchProducts.cancel();  // This is how you cancel a debounced function
         };
-    }, [searchTerm, pageSize, featured, minSalePercentage]);
+    }, []);
     // return { products, loading, error };
     return products;
 };
