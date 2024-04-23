@@ -23,9 +23,11 @@ import {
 const Sidebar = ({ isMobile }) => {
   const { isOpen, onToggle } = useDisclosure();
   const { isHeaderVisible } = useHeaderVisibility();
-  const { goToHome, currentPage, goToFaq, goToContactUs  } = useAppContext();
+  const { goToHome, currentPage, goToFaq, goToContactUs, updateMinSalePercentage  } = useAppContext();
   const sidebarTop = isHeaderVisible ? '7rem' : '0';
   const iconTop = isHeaderVisible ? '8rem' : '1rem';
+  const [selectedPercentage, setSelectedPercentage] = React.useState(20);
+
 
   const handleHomeClick = () => {
     console.log({currentPage})
@@ -44,6 +46,12 @@ const Sidebar = ({ isMobile }) => {
     goToContactUs(); // Reset to about view
     onToggle(); // Optional: Close sidebar upon clicking
   };
+
+  const handlePercentChange = (percentage) => {
+    const newPercentage = selectedPercentage === percentage ? null : percentage; // Toggle selection
+    setSelectedPercentage(newPercentage);
+    updateMinSalePercentage(newPercentage);
+  }
 
 
   return (      
@@ -112,17 +120,16 @@ const Sidebar = ({ isMobile }) => {
         <AccordionPanel pb={4}>
           {/* Filters for Category 2 */}
           <VStack align="stretch">
-            <Checkbox>5%+</Checkbox>
-            <Checkbox>10%+</Checkbox>
-            <Checkbox isChecked>20%+</Checkbox>
-            <Checkbox>30%+</Checkbox>
-            <Checkbox>40%+</Checkbox>
-            <Checkbox>50%+</Checkbox>
-            <Checkbox>60%+</Checkbox>
-            <Checkbox>70%+</Checkbox>
-            <Checkbox>80%+</Checkbox>
-            <Checkbox>90%+</Checkbox>
-            {/* Add more filters */}
+                {/* Update these checkboxes to call handlePercentChange with the correct percentage */}
+                {[5, 10, 20, 30, 40, 50, 60, 70, 80, 90].map(percentage => (
+                  <Checkbox 
+                  key={percentage} 
+                  isChecked={selectedPercentage === percentage}
+                  onChange={() => handlePercentChange(percentage)}
+                >
+                    {percentage}%+
+                  </Checkbox>
+                ))}
           </VStack>
         </AccordionPanel>
       </AccordionItem>

@@ -6,7 +6,12 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
+
+const corsOptions = {
+  origin: process.env.BACKEND_API || 'https://www.dealhound.shop', // Fallback to production frontend URL if CORS_ORIGIN isn't set
+};
+
+app.use(cors(corsOptions));
 app.use(express.json()); // for parsing application/json
 
 // Example route

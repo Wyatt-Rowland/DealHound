@@ -13,14 +13,24 @@ const Header = ({ onSearch }) => {
   const [inputValue, setInputValue] = useState('');
   const isMobile = useBreakpointValue({ base: true, md: false });
 
+const handleInputChange = (e) => {
+  const sanitizedValue = e.target.value.replace(/[^a-zA-Z0-9 ]/g, ""); // Remove special characters
+  setInputValue(sanitizedValue);
+};
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+const handleSubmit = () => {
+  const encodedValue = encodeURIComponent(inputValue); // Encode the input for URL
+  onSearch(encodedValue); // Pass the encoded and sanitized value back to the parent component
+};
 
-  const handleSubmit = () => {
-    onSearch(inputValue); // Pass the input value back to the parent component
-  };
+// const handleInputChange = (e) => {
+//   setInputValue(e.target.value);
+// };
+
+// const handleSubmit = () => {
+//   onSearch(inputValue); // Pass the input value back to the parent component
+// };
+
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -118,7 +128,7 @@ const Header = ({ onSearch }) => {
             fontSize: '1rem', // Adjust font size as needed
           }}
         />
-        <Button onClick={handleSubmit}>Search</Button>
+        <Button onClick={handleSubmit} mr='1rem'>Search</Button>
         {/* <FaUserCircle size="2em" /> */}
       </Flex>
     </Flex>
