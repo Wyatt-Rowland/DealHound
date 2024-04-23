@@ -14,7 +14,7 @@ const useBestBuyProducts = (searchTerm, pageSize, featured = false) => {
         return;
       }
       try {
-        const response = await axios.get('/api/bestBuy/bestbuy', {
+        const response = await axios.get(`${process.env.BACKEND_API}/api/bestBuy/bestbuy`, {
           params: { searchTerm, minSalePercentage,featured, pageSize }
         });
         setProducts(response.data);

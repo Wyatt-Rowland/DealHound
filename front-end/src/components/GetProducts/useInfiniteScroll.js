@@ -14,9 +14,10 @@ const useInfiniteScroll = (searchTerm, pageSize) => {
     useEffect(() => {
         // setLoading(true)
         const fetchProducts = debounce(async () => {
+            const urlForBackend = process.env.BACKEND_API;
             console.log('Fetching products for:', searchTerm, featured, pageSize);
             try {
-                const { data } = await axios.get('http://localhost:3001/api/bestBuy/bestbuy', {
+                const { data } = await axios.get(`${urlForBackend}/api/bestBuy/bestbuy`, {
                     params: { searchTerm, minSalePercentage, featured, pageSize},
                 });
                 setProducts(prevProducts => [...prevProducts, ...data]);
